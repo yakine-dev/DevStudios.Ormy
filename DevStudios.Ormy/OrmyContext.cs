@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,6 +69,54 @@ namespace DevStudios.Ormy
                 throw;
             }
             
+        }
+        /// <summary>
+        /// Delete record based on predicate object
+        /// </summary>
+        /// <param name="tableName">Table name</param>
+        /// <param name="predicate">predicate object</param>
+        /// <returns>Number of record deleted</returns>
+        public int Delete(string tableName, object predicate)
+        {
+            try
+            {
+                var t = predicate.GetType();
+                var predicateList = new List<string>();
+
+                foreach (var property in t.GetProperties())
+                {
+                    if (property.GetValue(predicate) is string)
+                    {
+                        predicateList.Add(property.Name + " = N'" + property.GetValue(predicate) + "'");
+                    }
+                    else if (property.GetValue(predicate) is DateTime)
+                    {
+                        predicateList.Add(property.Name + " = '" + ((DateTime)property.GetValue(predicate)).ToString(DateTimeFormat) + "'");
+                    }
+                    else if (property.GetValue(predicate) is bool)
+                    {
+                        var tmpValue = Convert.ToInt32(Convert.ToBoolean(property.GetValue(predicate)));
+                        predicateList.Add(property.Name +"="+  tmpValue.ToString());
+                    }
+                    else
+                    {
+                        predicateList.Add(property.Name + " = " +property.GetValue(predicate).ToString());
+                    }
+
+                }
+                var sql = $"DELETE FROM {tableName} WHERE   {string.Join(" AND ", predicateList)}";
+
+                _connection.Open();
+                var cmd = new SqlCommand(sql, _connection as SqlConnection);
+                var result = cmd.ExecuteNonQuery();
+                _connection.Close();
+                return result;
+            }
+            catch (Exception)
+            {
+                _connection.Close();
+                throw;
+            }
         }
     }
 }
