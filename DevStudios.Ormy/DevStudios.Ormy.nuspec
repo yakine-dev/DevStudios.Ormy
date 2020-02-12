@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>DevStudios.Ormy</id>
+    <version>0.0.1</version>
+    <title>ORMY</title>
+    <authors>DevStudios</authors>
+    <owners>DevStudios</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/yakine-dev/DevStudios.Ormy</projectUrl>
+    <description>Ormy micro ORM</description>
+    <releaseNotes>Internal use only</releaseNotes>
+    <copyright>Copyright 2020</copyright>
+    <tags>micro orm</tags>
+    <dependencies>
+      <group targetFramework="net45">
+      </group>
+    </dependencies>
+  </metadata>
+  
+  <files>
+    <file src="bin\Release\DevStudios.Ormy.dll" target="lib\net45"></file>
+  </files>
+</package>
